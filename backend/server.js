@@ -7,6 +7,8 @@ const cors = require("cors");
 require("dotenv").config();
 
 const app = express();
+const PORT = 5000;
+
 app.use(express.json());
 app.use(cors());
 
@@ -14,10 +16,11 @@ const db = mysql2.createPool({
   host: "localhost",
   user: "root",
   password: "",
-  database: "user_db",
+  database: "login_db",
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
+  port: 4306
 });
 
 db.getConnection((err) => {
@@ -39,18 +42,18 @@ app.post("/register", async (req, res) => {
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const checkUserSql = "SELECT * FROM users WHERE username = ?";
+  const checkUserSql = "SELECT * FROM account WHERE username = ?";
 
   db.query(checkUserSql, [username], (err, results) => {
     if (err) return res.status(500).json({ message: "Database Error" });
     if (results.length > 0) {
       return res.status(400).json({ message: "Username already exist" });
     }
-    const insertUserSql = "INSERT INTO users (username, password) VALUES (?,?)";
+    const insertUserSql = "INSERT INTO account (username, password) VALUES (?,?)";
     db.query(insertUserSql, [username, hashedPassword], (err, result) => {
       if (err) return res.status(500).json({ message: "Registration Failed" });
 
-      res.status(201).json({ message: "User registered successfully" });
+      res.status(201).json({ message: "Registered Successfully" });
     });
   });
 });
@@ -63,7 +66,7 @@ app.post("/login", (req, res) => {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  const sql = "SELECT * FROM users WHERE username = ?";
+  const sql = "SELECT * FROM account WHERE username = ?";
   db.query(sql, [username], async (err, results) => {
     if (err || results.length === 0) {
       return res.status(400).json({ message: "Invalid username or password" });
@@ -82,6 +85,6 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.listen(5000, () => {
-  console.log("Server running on port 5000");
+app.listen(PORT, () => {
+  console.log(`Server running on ${PORT}`);
 });

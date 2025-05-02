@@ -23,7 +23,7 @@ const Dashboard = () => {
 
   return (
     <Container>
-      <Typography variant="h4">Welcome {user}</Typography>
+      <Typography variant="h4">Welcome to Dashboard {user}</Typography>
       <Button
         variant="contained"
         color="secondary"

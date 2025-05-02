@@ -34,15 +34,14 @@ const Login = () =>{
 
 return (
 
-    <Container maxWidth="xs">
-      <Typography variant="h4">Login</Typography>
+    <Container>
+      <Typography><h1>Login</h1></Typography>
       <TextField label="Username" fullWidth margin="normal" value={username} onChange={(e) => setUsername(e.target.value)} />
       <TextField label="Password" type="password" fullWidth margin="normal" value={password} onChange={(e) => setPassword(e.target.value)} />
       <Button variant="contained" color="primary" fullWidth onClick={handleLogin}>
         Login
       </Button>
     </Container>
-
 
 );
 
